@@ -13,15 +13,11 @@ import {
   Tooltip,
   Legend as ChartLegend,
 } from 'chart.js';
+import { statusChip } from '../components/StatusChip';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, ChartLegend);
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A020F0', '#FF6384'];
-
-const statusChip = (status: string) => {
-  const color = status === 'Completed' ? 'chip-completed' : status === 'Pending' ? 'chip-pending' : 'chip-failed';
-  return <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-${color} bg-opacity-20 text-${color}`}>{status}</span>;
-};
 
 const Dashboard: React.FC = () => {
   const [summary, setSummary] = useState<any>(null);

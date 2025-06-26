@@ -10,25 +10,8 @@ import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DownloadIcon from '@mui/icons-material/Download';
 import dayjs, { Dayjs } from 'dayjs';
 import AlertChip from '../components/AlertChip';
-import { fetchTransactions } from '../api/transactions';
-
-const statusChip = (status: string) => {
-  let bg = '';
-  let text = '';
-  if (status === 'Completed' || status === 'Paid') {
-    bg = 'bg-green-600 bg-opacity-20';
-    text = 'text-green-400';
-  } else if (status === 'Pending') {
-    bg = 'bg-yellow-500 bg-opacity-20';
-    text = 'text-yellow-400';
-  } else {
-    bg = 'bg-red-600 bg-opacity-20';
-    text = 'text-red-400';
-  }
-  return (
-    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${bg} ${text}`}>{status}</span>
-  );
-};
+import { fetchTransactions, API_BASE_URL } from '../api/transactions';
+import { statusChip } from '../components/StatusChip';
 
 const statusOptions = ['Paid', 'Pending', 'Failed'];
 const categoryOptions = ['Revenue', 'Expense'];
@@ -128,7 +111,7 @@ const TransactionsPage: React.FC = () => {
       if (columns && columns.length) {
         params.append('columns', columns.join(','));
       }
-      window.open(`/transactions/export?${params.toString()}`, '_blank');
+      window.open(`${API_BASE_URL}/transactions/export?${params.toString()}`, '_blank');
       setAlert({ message: 'Export started. Your CSV will download shortly.', type: 'success' });
     } catch {
       setAlert({ message: 'Failed to export CSV', type: 'error' });
