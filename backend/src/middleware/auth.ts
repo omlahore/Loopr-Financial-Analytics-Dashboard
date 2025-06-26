@@ -13,19 +13,21 @@ declare global {
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+export const auth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
-      return res.status(401).json({ message: 'No token, authorization denied' });
+      res.status(401).json({ message: 'No token, authorization denied' });
+      return;
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
     const user = await User.findById(decoded.id).select('-password');
     
     if (!user) {
-      return res.status(401).json({ message: 'Token is not valid' });
+      res.status(401).json({ message: 'Token is not valid' });
+      return;
     }
 
     req.user = user;

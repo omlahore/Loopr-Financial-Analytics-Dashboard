@@ -14,7 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // Health check
-app.get('/', (_req, res) => res.send('🚀 Backend is live'));
+app.get('/', (_req, res) => {
+  res.send('🚀 Backend is live');
+});
 
 // Auth API
 app.use('/auth', authRouter);

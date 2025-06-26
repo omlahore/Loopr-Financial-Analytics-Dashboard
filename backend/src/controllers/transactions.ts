@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Transaction } from '../models/Transaction';
 import { Parser } from 'json2csv';
 
-export const getSummary = async (_req: Request, res: Response) => {
+export const getSummary = async (_req: Request, res: Response): Promise<void> => {
   try {
     const transactions = await Transaction.find();
 
@@ -41,7 +41,7 @@ export const getSummary = async (_req: Request, res: Response) => {
   }
 };
 
-export const exportTransactions = async (req: Request, res: Response) => {
+export const exportTransactions = async (req: Request, res: Response): Promise<void> => {
   try {
     const { status, category, search, sortBy = 'date', sortDir = 'desc', columns } = req.query;
     const filter: any = {};

@@ -2,14 +2,15 @@ import { Request, Response } from 'express';
 import { User, IUser } from '../models/User';
 import { generateToken } from '../middleware/auth';
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password, name } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      res.status(400).json({ message: 'User already exists' });
+      return;
     }
 
     // Create new user
@@ -22,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     await user.save();
 
     // Generate token
-    const token = generateToken(user._id.toString());
+    const token = generateToken(user._id?.toString() || '');
 
     res.status(201).json({
       token,
@@ -38,24 +39,26 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
     }
 
     // Generate token
-    const token = generateToken(user._id.toString());
+    const token = generateToken(user._id?.toString() || '');
 
     res.json({
       token,
@@ -71,7 +74,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findById(req.user?._id).select('-password');
     res.json(user);
