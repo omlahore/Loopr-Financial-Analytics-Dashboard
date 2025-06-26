@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,6 +10,7 @@ import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DownloadIcon from '@mui/icons-material/Download';
 import dayjs, { Dayjs } from 'dayjs';
 import AlertChip from '../components/AlertChip';
+import { fetchTransactions } from '../api/transactions';
 
 const statusChip = (status: string) => {
   const color = status === 'Completed' ? 'chip-completed' : status === 'Pending' ? 'chip-pending' : 'chip-failed';
@@ -50,7 +50,7 @@ const TransactionsPage: React.FC = () => {
 
   // Fetch unique users for autocomplete
   useEffect(() => {
-    axios.get('/transactions', { params: { limit: 1000 } })
+    fetchTransactions({ limit: 1000 })
       .then(userRes => {
         const users = Array.from(new Set(userRes.data.data.map((t: any) => t.user_profile))) as string[];
         setUserOptions(users);
@@ -85,7 +85,7 @@ const TransactionsPage: React.FC = () => {
         amountMin: amountMin || undefined,
         amountMax: amountMax || undefined,
       };
-      const txRes = await axios.get('/transactions', { params });
+      const txRes = await fetchTransactions(params);
       setRows(txRes.data.data);
       setTotal(txRes.data.total);
     } catch (err) {

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { login as loginApi, getCurrentUser } from '../api/auth';
 
 interface User {
   id: string;
@@ -39,20 +40,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
-          const response = await fetch('/auth/me', {
-            headers: {
-              'Authorization': `Bearer ${storedToken}`
-            }
-          });
-          
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-            setToken(storedToken);
-          } else {
-            localStorage.removeItem('token');
-            setToken(null);
-          }
+          const response = await getCurrentUser();
+          setUser(response.data);
+          setToken(storedToken);
         } catch (error) {
           console.error('Auth initialization error:', error);
           localStorage.removeItem('token');
@@ -67,25 +57,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Login failed');
-      }
-
-      const data = await response.json();
+      const response = await loginApi(email, password);
+      const data = response.data;
       setUser(data.user);
       setToken(data.token);
       localStorage.setItem('token', data.token);
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Login failed');
     }
   };
 
