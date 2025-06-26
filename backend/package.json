@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "cd backend && npm install",
-    "build":   "cd backend && npm run build",
-   
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "start":   "cd backend && npm run start",
-    "seed": "ts-node scripts/seed.ts"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev":   "ts-node-dev --respawn --transpile-only src/index.ts",
+    "seed":  "ts-node scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
