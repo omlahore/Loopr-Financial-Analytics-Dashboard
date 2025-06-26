@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "loopr-financial-analytics-dashboard",
+		"name": "Loopr Financial Analytics Dashboard API",
+		"description": "Complete API collection for the Loopr Financial Analytics Dashboard. Includes authentication, transactions management, and analytics endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "loopr-dashboard"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@loopr.com\",\n  \"password\": \"admin123\",\n  \"name\": \"Admin User\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('token', response.token);",
+									"    pm.environment.set('userId', response.user.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@loopr.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with email and password. Automatically sets the JWT token in environment variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						},
+						"description": "Get current user profile (requires authentication)"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and profile management"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Get All Transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/transactions?page=1&limit=20&sortBy=date&sortDir=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Number of items per page"
+								},
+								{
+									"key": "sortBy",
+									"value": "date",
+									"description": "Field to sort by (date, amount, user_profile, status, category)"
+								},
+								{
+									"key": "sortDir",
+									"value": "desc",
+									"description": "Sort direction (asc or desc)"
+								}
+							]
+						},
+						"description": "Get all transactions with pagination and sorting"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions with Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/transactions?status=Paid&category=Revenue&search=income&dateFrom=2024-01-01&dateTo=2024-12-31&amountMin=100&amountMax=10000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Paid",
+									"description": "Filter by transaction status"
+								},
+								{
+									"key": "category",
+									"value": "Revenue",
+									"description": "Filter by transaction category"
+								},
+								{
+									"key": "search",
+									"value": "income",
+									"description": "Search in user_profile, status, category, or amount"
+								},
+								{
+									"key": "dateFrom",
+									"value": "2024-01-01",
+									"description": "Filter transactions from this date (YYYY-MM-DD)"
+								},
+								{
+									"key": "dateTo",
+									"value": "2024-12-31",
+									"description": "Filter transactions to this date (YYYY-MM-DD)"
+								},
+								{
+									"key": "amountMin",
+									"value": "100",
+									"description": "Minimum amount filter"
+								},
+								{
+									"key": "amountMax",
+									"value": "10000",
+									"description": "Maximum amount filter"
+								}
+							]
+						},
+						"description": "Get transactions with advanced filtering options"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/transactions/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"transactions",
+								"summary"
+							]
+						},
+						"description": "Get transaction summary statistics and analytics data"
+					},
+					"response": []
+				},
+				{
+					"name": "Export Transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/transactions/export?status=Paid&category=Revenue&sortBy=date&sortDir=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"transactions",
+								"export"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Paid",
+									"description": "Filter by transaction status"
+								},
+								{
+									"key": "category",
+									"value": "Revenue",
+									"description": "Filter by transaction category"
+								},
+								{
+									"key": "sortBy",
+									"value": "date",
+									"description": "Field to sort by"
+								},
+								{
+									"key": "sortDir",
+									"value": "desc",
+									"description": "Sort direction"
+								}
+							]
+						},
+						"description": "Export transactions to CSV format with optional filters"
+					},
+					"response": []
+				}
+			],
+			"description": "Transaction management endpoints for fetching, filtering, and exporting transaction data"
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Backend Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Check if the backend server is running"
+					},
+					"response": []
+				}
+			],
+			"description": "Health check endpoints to verify API availability"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000",
+			"type": "string",
+			"description": "Base URL for the API (change for production)"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"description": "JWT authentication token (automatically set after login)"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string",
+			"description": "Current user ID (automatically set after login)"
+		}
+	]
+} 
