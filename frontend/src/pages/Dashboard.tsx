@@ -14,6 +14,7 @@ import {
   Legend as ChartLegend,
 } from 'chart.js';
 import { statusChip } from '../components/StatusChip';
+import { formatDateWithDay } from '../utils/dateUtils';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, ChartLegend);
 
@@ -209,25 +210,47 @@ const Dashboard: React.FC = () => {
                     label: 'Income',
                     data: chartRevenue,
                     borderColor: '#22e584',
-                    backgroundColor: 'rgba(34,229,132,0.2)',
+                    backgroundColor: 'rgba(34,229,132,0.1)',
                     pointBackgroundColor: '#22e584',
-                    pointBorderColor: '#22e584',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: '#22e584',
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 3,
                     tension: 0.4,
+                    borderWidth: 3,
+                    fill: true,
+                    cubicInterpolationMode: 'monotone',
                   },
                   {
                     label: 'Expenses',
                     data: chartExpense,
                     borderColor: '#f6c945',
-                    backgroundColor: 'rgba(246,201,69,0.2)',
+                    backgroundColor: 'rgba(246,201,69,0.1)',
                     pointBackgroundColor: '#f6c945',
-                    pointBorderColor: '#f6c945',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: '#f6c945',
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 3,
                     tension: 0.4,
+                    borderWidth: 3,
+                    fill: true,
+                    cubicInterpolationMode: 'monotone',
                   },
                 ],
               }}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeInOutQuart',
+                },
                 plugins: {
                   legend: {
                     display: false,
@@ -235,36 +258,84 @@ const Dashboard: React.FC = () => {
                   tooltip: {
                     mode: 'index',
                     intersect: false,
-                    backgroundColor: '#232733',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    borderColor: '#333',
-                    borderWidth: 1,
-                    padding: 12,
-                    caretSize: 8,
+                    backgroundColor: 'rgba(35, 39, 51, 0.95)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#22e584',
+                    borderWidth: 2,
+                    padding: 16,
+                    cornerRadius: 12,
+                    caretSize: 10,
                     displayColors: true,
+                    titleFont: {
+                      size: 14,
+                      weight: 'bold',
+                    },
+                    bodyFont: {
+                      size: 13,
+                    },
+                    callbacks: {
+                      title: function(context) {
+                        return context[0].label;
+                      },
+                      label: function(context) {
+                        const label = context.dataset.label || '';
+                        const value = context.parsed.y;
+                        return `${label}: $${value.toLocaleString()}`;
+                      },
+                    },
                   },
                 },
                 interaction: {
                   mode: 'index',
                   intersect: false,
                 },
+                hover: {
+                  mode: 'index',
+                  intersect: false,
+                },
                 scales: {
                   x: {
                     grid: {
-                      color: '#333',
+                      color: 'rgba(160, 174, 192, 0.1)',
                     },
                     ticks: {
                       color: '#a0aec0',
+                      font: {
+                        size: 12,
+                      },
+                      padding: 8,
+                    },
+                    border: {
+                      display: false,
                     },
                   },
                   y: {
                     grid: {
-                      color: '#333',
+                      color: 'rgba(160, 174, 192, 0.1)',
                     },
                     ticks: {
                       color: '#a0aec0',
+                      font: {
+                        size: 12,
+                      },
+                      padding: 8,
+                      callback: function(value) {
+                        return '$' + value.toLocaleString();
+                      },
                     },
+                    border: {
+                      display: false,
+                    },
+                  },
+                },
+                elements: {
+                  point: {
+                    hoverRadius: 8,
+                    radius: 4,
+                  },
+                  line: {
+                    tension: 0.4,
                   },
                 },
               }}
@@ -323,7 +394,7 @@ const Dashboard: React.FC = () => {
                     <img src={tx.user_avatar || 'https://randomuser.me/api/portraits/men/32.jpg'} alt={tx.user_profile} className="w-8 h-8 rounded-full object-cover" />
                     <span>{tx.user_profile}</span>
                   </td>
-                  <td className="py-3 px-4">{new Date(tx.date).toLocaleDateString()}</td>
+                  <td className="py-3 px-4">{formatDateWithDay(tx.date)}</td>
                   <td className={`py-3 px-4 font-semibold ${tx.amount >= 0 ? 'text-accent-green' : 'text-accent-yellow'}`}>{tx.amount >= 0 ? '+' : ''}${Math.abs(tx.amount).toFixed(2)}</td>
                   <td className="py-3 px-4">{statusChip(tx.status)}</td>
                 </tr>

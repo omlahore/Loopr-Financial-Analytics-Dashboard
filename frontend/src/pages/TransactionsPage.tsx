@@ -12,6 +12,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import AlertChip from '../components/AlertChip';
 import { fetchTransactions, API_BASE_URL } from '../api/transactions';
 import { statusChip } from '../components/StatusChip';
+import { formatDateWithDay } from '../utils/dateUtils';
 
 const statusOptions = ['Paid', 'Pending', 'Failed'];
 const categoryOptions = ['Revenue', 'Expense'];
@@ -292,7 +293,7 @@ const TransactionsPage: React.FC = () => {
                       <img src={tx.user_avatar || 'https://randomuser.me/api/portraits/men/32.jpg'} alt={tx.user_profile} className="w-8 h-8 rounded-full object-cover" />
                       <span>{tx.user_profile}</span>
                     </td>
-                    <td className="py-3 px-4">{new Date(tx.date).toLocaleDateString()}</td>
+                    <td className="py-3 px-4">{formatDateWithDay(tx.date)}</td>
                     <td className={`py-3 px-4 font-semibold ${tx.amount >= 0 ? 'text-accent-green' : 'text-accent-yellow'}`}>{tx.amount >= 0 ? '+' : ''}${Math.abs(tx.amount).toFixed(2)}</td>
                     <td className="py-3 px-4">{statusChip(tx.status)}</td>
                   </tr>
