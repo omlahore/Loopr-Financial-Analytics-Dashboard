@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
+// Use Render deployment URL for production
+// Use relative URL for development (proxy handles CORS)
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://loopr-financial-analytics-dashboard.onrender.com'
+  : '';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true, // Enable credentials for CORS
 });
 
 // Add token to requests if available

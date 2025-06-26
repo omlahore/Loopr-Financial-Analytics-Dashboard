@@ -16,7 +16,22 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'https://loopr-financial-analytics-dashboard.onrender.com', // Production domain
+    'http://localhost:3000', // React dev server (for local development)
+    'http://localhost:3001', // Alternative React port
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Health check
