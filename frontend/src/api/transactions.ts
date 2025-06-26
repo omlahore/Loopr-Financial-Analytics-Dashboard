@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Use Render deployment URL for production
 // Use relative URL for development (proxy handles CORS)
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
+export const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://loopr-financial-analytics-dashboard.onrender.com'
   : '';
 
