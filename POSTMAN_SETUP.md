@@ -17,12 +17,15 @@ This guide will help you set up and use the Postman collection for testing the L
 
 | Variable | Initial Value | Description |
 |----------|---------------|-------------|
-| `baseUrl` | `http://localhost:4000` | Base URL for local development |
+| `baseUrl` | `https://loopr-financial-analytics-dashboard.onrender.com` | Production URL (default) |
 | `token` | (leave empty) | JWT token (auto-set after login) |
 | `userId` | (leave empty) | User ID (auto-set after login) |
 
-**For Production:**
-- Change `baseUrl` to your deployed backend URL (e.g., `https://your-backend.onrender.com`)
+**For Local Development:**
+- Change `baseUrl` to `http://localhost:4000`
+
+**For Production (Default):**
+- `baseUrl` is already set to `https://loopr-financial-analytics-dashboard.onrender.com`
 
 ### 3. Start Testing
 1. Select your environment from the dropdown
@@ -124,11 +127,12 @@ cd backend
 npm install
 npm run dev
 ```
+Then change `baseUrl` to `http://localhost:4000`
 
-**Production:**
-- Update `baseUrl` to your deployed backend URL
-- Ensure CORS is properly configured
-- Verify all environment variables are set
+**Production (Default):**
+- `baseUrl` is set to `https://loopr-financial-analytics-dashboard.onrender.com`
+- No additional setup required
+- Ready to use immediately
 
 ## 📝 Response Examples
 
@@ -181,6 +185,7 @@ npm run dev
 - [Postman Documentation](https://learning.postman.com/)
 - [JWT Token Debugger](https://jwt.io/)
 - [API Testing Best Practices](https://www.postman.com/collection/guides/)
+- [Live API Endpoint](https://loopr-financial-analytics-dashboard.onrender.com)
 
 ## 📞 Support
 
