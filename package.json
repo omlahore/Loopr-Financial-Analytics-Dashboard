@@ -1,7 +1,11 @@
+cat > package.json << 'EOF'
 {
-  "dependencies": {
-    "chart.js": "^4.5.0",
-    "react-chartjs-2": "^5.3.0",
-    "react-dom": "^19.1.0"
+  "name": "loopr-monorepo",
+  "private": true,
+  "scripts": {
+    "install": "cd backend && npm install",
+    "build":   "cd backend && npm run build",
+    "start":   "cd backend && npm run start"
   }
 }
+EOF

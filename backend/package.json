@@ -4,9 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "install": "cd backend && npm install",
+    "build":   "cd backend && npm run build",
+   
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "start": "node dist/index.js",
+    "start":   "cd backend && npm run start",
     "seed": "ts-node scripts/seed.ts"
   },
   "keywords": [],
