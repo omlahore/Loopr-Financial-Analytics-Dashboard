@@ -13,8 +13,21 @@ import AlertChip from '../components/AlertChip';
 import { fetchTransactions } from '../api/transactions';
 
 const statusChip = (status: string) => {
-  const color = status === 'Completed' ? 'chip-completed' : status === 'Pending' ? 'chip-pending' : 'chip-failed';
-  return <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-${color} bg-opacity-20 text-${color}`}>{status}</span>;
+  let bg = '';
+  let text = '';
+  if (status === 'Completed' || status === 'Paid') {
+    bg = 'bg-green-600 bg-opacity-20';
+    text = 'text-green-400';
+  } else if (status === 'Pending') {
+    bg = 'bg-yellow-500 bg-opacity-20';
+    text = 'text-yellow-400';
+  } else {
+    bg = 'bg-red-600 bg-opacity-20';
+    text = 'text-red-400';
+  }
+  return (
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${bg} ${text}`}>{status}</span>
+  );
 };
 
 const statusOptions = ['Paid', 'Pending', 'Failed'];
