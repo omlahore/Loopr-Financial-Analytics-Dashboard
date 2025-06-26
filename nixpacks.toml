@@ -1,11 +1,8 @@
 [phases.setup]
 cmds = ['npm ci']
 
-[phases.build]
-cmds = ['npm run build']
-
 [phases.start]
-cmd = 'node dist/index.js'
+cmd = 'npx ts-node src/index.ts'
 
 [variables]
 NODE_ENV = 'production'
