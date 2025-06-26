@@ -1,8 +1,11 @@
 [phases.setup]
-cmds = ['npm ci --only=production']
+cmds = ['npm ci']
+
+[phases.install]
+cmds = ['npm run build']
 
 [phases.start]
-cmd = 'npx ts-node src/index.ts'
+cmd = 'npm start'
 
 [variables]
 NODE_ENV = 'production'
