@@ -18,13 +18,28 @@ if (!MONGODB_URI) {
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    'https://loopr-financial-analytics-dashboard.onrender.com', // Production domain
-    'http://localhost:3000', // React dev server (for local development)
-    'http://localhost:3001', // Alternative React port
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001',
-  ],
+  origin: function (origin: string | undefined, callback: Function) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://loopr-financial-analytics-dashboard.onrender.com', // Production domain
+      'http://localhost:3000', // React dev server
+      'http://localhost:3001', // Alternative React port
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:3001',
+      'https://loopr.omlahore.com', // Your custom domain if you have one
+    ];
+    
+    console.log('CORS request from origin:', origin);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
