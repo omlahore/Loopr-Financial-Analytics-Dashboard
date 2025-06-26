@@ -45,10 +45,23 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"console.log('Response Status:', pm.response.code);",
+									"console.log('Response Body:', pm.response.text());",
+									"",
 									"if (pm.response.code === 200) {",
 									"    const response = pm.response.json();",
-									"    pm.environment.set('token', response.token);",
-									"    pm.environment.set('userId', response.user.id);",
+									"    console.log('Token received:', response.token);",
+									"    ",
+									"    if (response.token) {",
+									"        pm.environment.set('token', response.token);",
+									"        pm.environment.set('userId', response.user.id);",
+									"        console.log('Token set in environment:', pm.environment.get('token'));",
+									"    } else {",
+									"        console.error('No token in response');",
+									"    }",
+									"} else {",
+									"    console.error('Login failed with status:', pm.response.code);",
+									"    console.error('Error response:', pm.response.text());",
 									"}"
 								],
 								"type": "text/javascript"
@@ -83,6 +96,24 @@
 				},
 				{
 					"name": "Get Current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('Current token:', pm.environment.get('token'));",
+									"console.log('Response Status:', pm.response.code);",
+									"",
+									"if (pm.response.code === 200) {",
+									"    console.log('User profile retrieved successfully');",
+									"} else {",
+									"    console.error('Failed to get user profile:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -113,6 +144,27 @@
 			"item": [
 				{
 					"name": "Get All Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('Using token:', pm.environment.get('token'));",
+									"console.log('Response Status:', pm.response.code);",
+									"",
+									"if (pm.response.code === 200) {",
+									"    console.log('Transactions retrieved successfully');",
+									"} else if (pm.response.code === 401) {",
+									"    console.error('Authentication failed. Please run Login User first.');",
+									"    console.error('Response:', pm.response.text());",
+									"} else {",
+									"    console.error('Request failed:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -158,6 +210,27 @@
 				},
 				{
 					"name": "Get Transactions with Filters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('Using token:', pm.environment.get('token'));",
+									"console.log('Response Status:', pm.response.code);",
+									"",
+									"if (pm.response.code === 200) {",
+									"    console.log('Filtered transactions retrieved successfully');",
+									"} else if (pm.response.code === 401) {",
+									"    console.error('Authentication failed. Please run Login User first.');",
+									"    console.error('Response:', pm.response.text());",
+									"} else {",
+									"    console.error('Request failed:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -218,6 +291,27 @@
 				},
 				{
 					"name": "Get Transaction Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('Using token:', pm.environment.get('token'));",
+									"console.log('Response Status:', pm.response.code);",
+									"",
+									"if (pm.response.code === 200) {",
+									"    console.log('Transaction summary retrieved successfully');",
+									"} else if (pm.response.code === 401) {",
+									"    console.error('Authentication failed. Please run Login User first.');",
+									"    console.error('Response:', pm.response.text());",
+									"} else {",
+									"    console.error('Request failed:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -242,6 +336,27 @@
 				},
 				{
 					"name": "Export Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('Using token:', pm.environment.get('token'));",
+									"console.log('Response Status:', pm.response.code);",
+									"",
+									"if (pm.response.code === 200) {",
+									"    console.log('Transactions exported successfully');",
+									"} else if (pm.response.code === 401) {",
+									"    console.error('Authentication failed. Please run Login User first.');",
+									"    console.error('Response:', pm.response.text());",
+									"} else {",
+									"    console.error('Request failed:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [

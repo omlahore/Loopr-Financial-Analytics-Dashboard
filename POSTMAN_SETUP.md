@@ -195,6 +195,94 @@ If you encounter any issues:
 3. Check the backend logs for detailed error messages
 4. Ensure all environment variables are properly configured
 
+### Troubleshooting 401 Unauthorized Errors
+
+If you're getting 401 errors on transaction endpoints, follow these steps:
+
+#### 1. Check Token Generation
+- Run the "Login User" request first
+- Check the Postman Console for the response
+- Verify that a token is received and stored in environment variables
+
+#### 2. Verify Token Format
+- The token should be automatically added to the Authorization header as `Bearer {{token}}`
+- Check that the token is not empty or malformed
+
+#### 3. Check Token Expiration
+- JWT tokens expire after 24 hours
+- If your token is expired, run "Login User" again to get a fresh token
+
+#### 4. Manual Token Debugging
+If you're still having issues, you can debug the token manually:
+
+```bash
+# Run the debug script (requires Node.js and jsonwebtoken package)
+node debug_token.js
+```
+
+#### 5. Common Issues and Solutions
+
+**Issue**: "No token, authorization denied"
+- **Solution**: Run "Login User" first to get a token
+
+**Issue**: "Token is not valid"
+- **Solution**: The token might be expired or malformed. Run "Login User" again
+
+**Issue**: Token appears to be set but still getting 401
+- **Solution**: Check the Postman Console for the exact error message and token being used
+
+#### 6. Environment Variable Check
+- In Postman, go to the "Environment" dropdown (top right)
+- Select "Manage Environments"
+- Verify that the `token` variable is set and not empty
+
+#### 7. Manual Authorization Setup
+If automatic token setting isn't working:
+
+1. Copy the token from the login response
+2. In your request, go to the "Authorization" tab
+3. Select "Bearer Token" from the Type dropdown
+4. Paste the token in the Token field
+5. Or manually add the header: `Authorization: Bearer YOUR_TOKEN_HERE`
+
+#### 8. Example Requests
+
+##### Login Request
+```json
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@loopr.com",
+  "password": "admin123"
+}
+```
+
+##### Get Transactions Request
+```json
+GET {{baseUrl}}/transactions?page=1&limit=20&sortBy=date&sortDir=desc
+Authorization: Bearer {{token}}
+```
+
+##### Filtered Transactions Request
+```json
+GET {{baseUrl}}/transactions?status=Paid&category=Revenue&search=income
+Authorization: Bearer {{token}}
+```
+
+#### 9. Production URL
+
+The collection is configured to use the production backend URL:
+- **Base URL**: `https://loopr-financial-analytics-dashboard.onrender.com`
+
+#### 10. Support
+
+If you continue to experience issues:
+1. Check the Postman Console for detailed error messages
+2. Verify the backend is running and accessible
+3. Ensure you're using the correct credentials
+4. Try the debug script to test token generation manually
+
 ---
 
 **Happy Testing! 🎉** 
