@@ -26,6 +26,7 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<any[]>(recent);
+  const [overviewView, setOverviewView] = useState<'Monthly' | 'Weekly'>('Monthly');
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +45,22 @@ const Dashboard: React.FC = () => {
       });
   }, []);
 
-  // Debounced search effect
+  // Compute weekly trend from monthlyTrend if needed
+  const getWeeklyTrend = () => {
+    if (!summary || !summary.monthlyTrend) return [];
+    // Group by week (ISO week)
+    const weekMap: Record<string, { revenue: number; expense: number }> = {};
+    summary.monthlyTrend.forEach((d: any) => {
+      // Parse month string to date, then get week number
+      const date = new Date(d.month + ' 1, 2024');
+      const week = `${date.getFullYear()}-W${Math.ceil((date.getDate() + ((date.getDay() + 6) % 7)) / 7)}`;
+      if (!weekMap[week]) weekMap[week] = { revenue: 0, expense: 0 };
+      weekMap[week].revenue += d.revenue;
+      weekMap[week].expense += d.expense;
+    });
+    return Object.entries(weekMap).map(([week, data]) => ({ week, ...data }));
+  };
+
   useEffect(() => {
     const handler = setTimeout(() => {
       if (search.trim() === '') {
@@ -58,16 +74,75 @@ const Dashboard: React.FC = () => {
     return () => clearTimeout(handler);
   }, [search, recent]);
 
+  // Skeleton loader components
+  const SkeletonCard = () => (
+    <div className="bg-bg-card rounded-xl p-6 flex items-center gap-4 shadow-md animate-pulse">
+      <div className="w-12 h-12 rounded-lg bg-gray-700" />
+      <div className="flex-1 space-y-2">
+        <div className="h-4 w-24 bg-gray-700 rounded" />
+        <div className="h-6 w-32 bg-gray-700 rounded" />
+      </div>
+    </div>
+  );
+  const SkeletonChart = () => (
+    <div className="h-64 bg-bg-main rounded-lg flex items-center justify-center animate-pulse">
+      <div className="w-2/3 h-32 bg-gray-700 rounded" />
+    </div>
+  );
+  const SkeletonTable = () => (
+    <div className="overflow-x-auto animate-pulse">
+      <table className="min-w-full text-left">
+        <thead>
+          <tr className="text-text-muted text-sm">
+            <th className="py-2 px-4 font-medium">Name</th>
+            <th className="py-2 px-4 font-medium">Date</th>
+            <th className="py-2 px-4 font-medium">Amount</th>
+            <th className="py-2 px-4 font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...Array(5)].map((_, i) => (
+            <tr key={i} className="border-t border-border-dark">
+              <td className="py-3 px-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gray-700" />
+                <span className="h-4 w-24 bg-gray-700 rounded block" />
+              </td>
+              <td className="py-3 px-4"><span className="h-4 w-20 bg-gray-700 rounded block" /></td>
+              <td className="py-3 px-4"><span className="h-4 w-16 bg-gray-700 rounded block" /></td>
+              <td className="py-3 px-4"><span className="h-4 w-16 bg-gray-700 rounded block" /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
   if (loading) {
-    console.log('Dashboard loading:', { loading, summary, recent, error });
-    return <div className="flex justify-center items-center min-h-[50vh] text-text-muted">Loading...</div>;
+    return (
+      <div className="flex flex-col gap-8 bg-bg-main min-h-screen">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(4)].map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="lg:w-3/5 w-full bg-bg-card rounded-xl p-6 shadow-md">
+            <SkeletonChart />
+          </div>
+          <div className="lg:w-2/5 w-full flex flex-col gap-8">
+            <div className="bg-bg-card rounded-xl p-6 shadow-md h-full flex flex-col">
+              <SkeletonTable />
+            </div>
+          </div>
+        </div>
+        <div className="bg-bg-card rounded-xl p-6 shadow-md mt-4">
+          <SkeletonTable />
+        </div>
+      </div>
+    );
   }
   if (error) {
-    console.log('Dashboard error:', { loading, summary, recent, error });
     return <div className="flex justify-center items-center min-h-[50vh] text-red-500">Error: {error}</div>;
   }
   if (!summary) {
-    console.log('Dashboard no summary:', { loading, summary, recent, error });
     return <div className="flex justify-center items-center min-h-[50vh] text-yellow-500">No summary data loaded.</div>;
   }
 
@@ -77,6 +152,17 @@ const Dashboard: React.FC = () => {
     { label: 'Expenses', value: summary.totalExpenses, icon: '/expenses.png', color: 'accent-yellow' },
     { label: 'Net', value: summary.net, icon: '/savings.png', color: summary.net >= 0 ? 'accent-green' : 'accent-yellow' },
   ];
+
+  // Chart data selection
+  const chartLabels = overviewView === 'Monthly'
+    ? summary.monthlyTrend.map((d: any) => d.month)
+    : getWeeklyTrend().map((d: any) => d.week);
+  const chartRevenue = overviewView === 'Monthly'
+    ? summary.monthlyTrend.map((d: any) => d.revenue)
+    : getWeeklyTrend().map((d: any) => d.revenue);
+  const chartExpense = overviewView === 'Monthly'
+    ? summary.monthlyTrend.map((d: any) => d.expense)
+    : getWeeklyTrend().map((d: any) => d.expense);
 
   return (
     <div className="flex flex-col gap-8">
@@ -104,20 +190,24 @@ const Dashboard: React.FC = () => {
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1 text-accent-green"><span className="w-3 h-3 rounded-full bg-accent-green inline-block"></span>Income</span>
               <span className="flex items-center gap-1 text-accent-yellow"><span className="w-3 h-3 rounded-full bg-accent-yellow inline-block"></span>Expenses</span>
-              <select className="bg-bg-main text-text-main rounded px-2 py-1 border border-border-dark ml-4">
-                <option>Monthly</option>
-                <option>Weekly</option>
+              <select
+                className="bg-bg-main text-text-main rounded px-2 py-1 border border-border-dark ml-4"
+                value={overviewView}
+                onChange={e => setOverviewView(e.target.value as 'Monthly' | 'Weekly')}
+              >
+                <option value="Monthly">Monthly</option>
+                <option value="Weekly">Weekly</option>
               </select>
             </div>
           </div>
           <div className="h-64 bg-bg-main rounded-lg">
             <LineChartJS
               data={{
-                labels: summary.monthlyTrend.map((d: any) => d.month),
+                labels: chartLabels,
                 datasets: [
                   {
                     label: 'Income',
-                    data: summary.monthlyTrend.map((d: any) => d.revenue),
+                    data: chartRevenue,
                     borderColor: '#22e584',
                     backgroundColor: 'rgba(34,229,132,0.2)',
                     pointBackgroundColor: '#22e584',
@@ -126,7 +216,7 @@ const Dashboard: React.FC = () => {
                   },
                   {
                     label: 'Expenses',
-                    data: summary.monthlyTrend.map((d: any) => d.expense),
+                    data: chartExpense,
                     borderColor: '#f6c945',
                     backgroundColor: 'rgba(246,201,69,0.2)',
                     pointBackgroundColor: '#f6c945',

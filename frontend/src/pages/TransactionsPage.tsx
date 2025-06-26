@@ -271,9 +271,9 @@ const TransactionsPage: React.FC = () => {
           <span className="text-sm text-text-muted">Showing {rows.length} of {total} results</span>
         </div>
         {loading ? (
-          <div className="flex justify-center items-center h-64 text-text-muted">Loading...</div>
+          <div className="flex justify-center items-center h-64 text-text-muted bg-bg-main">Loading...</div>
         ) : error ? (
-          <div className="flex justify-center items-center h-64 text-red-500">{error}</div>
+          <div className="flex justify-center items-center h-64 text-red-500 bg-bg-main">{error}</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">

@@ -35,24 +35,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
+  // Validate token on mount and when token changes
   useEffect(() => {
-    const initializeAuth = async () => {
+    const validateToken = async () => {
       const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        try {
-          const response = await getCurrentUser();
-          setUser(response.data);
-          setToken(storedToken);
-        } catch (error) {
-          console.error('Auth initialization error:', error);
+      
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        console.log('Validating token...');
+        const response = await getCurrentUser();
+        setUser(response.data);
+        setToken(storedToken);
+        console.log('Token validated successfully');
+      } catch (error: any) {
+        console.error('Token validation failed:', error);
+        
+        // Only clear token for 401 errors
+        if (error.response?.status === 401) {
+          console.log('Token expired or invalid, clearing...');
           localStorage.removeItem('token');
           setToken(null);
+          setUser(null);
         }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    initializeAuth();
+    validateToken();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -62,12 +76,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(data.user);
       setToken(data.token);
       localStorage.setItem('token', data.token);
+      console.log('Login successful, token stored');
     } catch (error: any) {
+      console.error('Login failed:', error);
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   };
 
   const logout = () => {
+    console.log('Logging out...');
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');

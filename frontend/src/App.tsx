@@ -1,11 +1,13 @@
 import React from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Link } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import TransactionsPage from './pages/TransactionsPage';
 import SummaryPage from './pages/SummaryPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
+import AnalyticsPage from './pages/AnalyticsPage';
+import WalletPage from './pages/WalletPage';
 // import other pages as needed
 
 const navItems = [
@@ -15,7 +17,7 @@ const navItems = [
   { name: 'Analytics', path: '/analytics', icon: '/analytics.png' },
   { name: 'Personal', path: '/personal', icon: '/personal.png' },
   { name: 'Message', path: '/message', icon: '/message.png' },
-  { name: 'Setting', path: '/setting', icon: '/setting.png' },
+  { name: 'Settings', path: '/setting', icon: '/setting.png' },
 ];
 
 const backgrounds = ['/bg1.png', '/bg2.png', '/bg3.png', '/bg4.png'];
@@ -48,14 +50,14 @@ const App: React.FC = () => {
         </div>
         <nav className="flex-1 space-y-2">
           {navItems.map(item => (
-            <a
+            <Link
               key={item.name}
-              href={item.path}
+              to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-150 hover:bg-bg-card ${location.pathname === item.path ? 'bg-bg-card text-accent-green' : 'text-text-muted'}`}
             >
               <img src={item.icon} alt={item.name + ' icon'} className="w-5 h-5 object-contain" />
               <span className="font-medium">{item.name}</span>
-            </a>
+            </Link>
           ))}
         </nav>
       </aside>
@@ -100,6 +102,8 @@ const App: React.FC = () => {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
                     <Route path="/summary" element={<SummaryPage />} />
+                    <Route path="/analytics" element={<AnalyticsPage />} />
+                    <Route path="/wallet" element={<WalletPage />} />
                     {/* Add other routes here */}
                   </Routes>
                 </ProtectedRoute>

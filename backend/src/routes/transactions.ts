@@ -1,9 +1,13 @@
 import { Router } from 'express';
 import { Transaction } from '../models/Transaction';
 import { getSummary, exportTransactions } from '../controllers/transactions';
+import { auth } from '../middleware/auth';
 import { Parser } from 'json2csv';
 
 const router = Router();
+
+// Apply authentication middleware to all routes
+router.use(auth);
 
 // GET /transactions?page=1&limit=20&status=Paid&category=Revenue&search=foo&sortBy=amount&sortDir=asc
 router.get('/', async (req, res) => {
