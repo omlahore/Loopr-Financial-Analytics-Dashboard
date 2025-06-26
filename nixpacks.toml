@@ -1,5 +1,5 @@
 [phases.setup]
-cmds = ['npm ci']
+cmds = ['npm ci --only=production']
 
 [phases.start]
 cmd = 'npx ts-node src/index.ts'
