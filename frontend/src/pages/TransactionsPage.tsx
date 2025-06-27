@@ -109,12 +109,65 @@ const TransactionsPage: React.FC = () => {
         status,
         category,
       });
+      
+      // Add all available filters to match the page filtering
+      if (dateStart) {
+        params.append('dateFrom', dayjs(dateStart).toISOString());
+      }
+      if (dateEnd) {
+        params.append('dateTo', dayjs(dateEnd).toISOString());
+      }
+      if (amountMin) {
+        params.append('amountMin', amountMin);
+      }
+      if (amountMax) {
+        params.append('amountMax', amountMax);
+      }
+      if (user) {
+        params.append('user', user);
+      }
+      
       if (columns && columns.length) {
         params.append('columns', columns.join(','));
       }
-      window.open(`${API_BASE_URL}/transactions/export?${params.toString()}`, '_blank');
-      setAlert({ message: 'Export started. Your CSV will download shortly.', type: 'success' });
-    } catch {
+      
+      // Use the authenticated API call instead of window.open()
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setAlert({ message: 'Authentication required. Please login again.', type: 'error' });
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/transactions/export?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setAlert({ message: 'Authentication failed. Please login again.', type: 'error' });
+        } else {
+          setAlert({ message: 'Failed to export CSV', type: 'error' });
+        }
+        return;
+      }
+
+      // Create a blob from the response and trigger download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'transactions.csv';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      setAlert({ message: 'CSV exported successfully!', type: 'success' });
+    } catch (error) {
+      console.error('Export error:', error);
       setAlert({ message: 'Failed to export CSV', type: 'error' });
     }
   };

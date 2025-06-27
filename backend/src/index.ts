@@ -28,7 +28,8 @@ const corsOptions = {
       'http://localhost:3001', // Alternative React port
       'http://127.0.0.1:3000',
       'http://127.0.0.1:3001',
-      'https://loopr.omlahore.com', // Your custom domain if you have one
+      'https://loopr.omlahore.com', // Your custom domain (HTTPS)
+      'http://loopr.omlahore.com', // Your custom domain (HTTP)
     ];
     
     console.log('CORS request from origin:', origin);

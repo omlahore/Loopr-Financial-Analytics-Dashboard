@@ -44,12 +44,30 @@ const getSummary = async (_req, res) => {
 exports.getSummary = getSummary;
 const exportTransactions = async (req, res) => {
     try {
-        const { status, category, search, sortBy = 'date', sortDir = 'desc', columns } = req.query;
+        const { status, category, search, sortBy = 'date', sortDir = 'desc', columns, dateFrom, dateTo, amountMin, amountMax, user } = req.query;
         const filter = {};
         if (status)
             filter.status = status;
         if (category)
             filter.category = category;
+        if (user)
+            filter.user_profile = user;
+        // Date range filter
+        if (dateFrom || dateTo) {
+            filter.date = {};
+            if (dateFrom)
+                filter.date.$gte = new Date(dateFrom);
+            if (dateTo)
+                filter.date.$lte = new Date(dateTo);
+        }
+        // Amount range filter
+        if (amountMin || amountMax) {
+            filter.amount = {};
+            if (amountMin)
+                filter.amount.$gte = Number(amountMin);
+            if (amountMax)
+                filter.amount.$lte = Number(amountMax);
+        }
         if (search) {
             const regex = new RegExp(search, 'i');
             filter.$or = [

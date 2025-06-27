@@ -3,7 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const Transaction_1 = require("../models/Transaction");
 const transactions_1 = require("../controllers/transactions");
+const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
+// Apply authentication middleware to all routes
+router.use(auth_1.auth);
 // GET /transactions?page=1&limit=20&status=Paid&category=Revenue&search=foo&sortBy=amount&sortDir=asc
 router.get('/', async (req, res) => {
     try {

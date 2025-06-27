@@ -43,10 +43,39 @@ export const getSummary = async (_req: Request, res: Response): Promise<void> =>
 
 export const exportTransactions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { status, category, search, sortBy = 'date', sortDir = 'desc', columns } = req.query;
+    const { 
+      status, 
+      category, 
+      search, 
+      sortBy = 'date', 
+      sortDir = 'desc', 
+      columns,
+      dateFrom,
+      dateTo,
+      amountMin,
+      amountMax,
+      user
+    } = req.query;
+    
     const filter: any = {};
     if (status)   filter.status   = status;
     if (category) filter.category = category;
+    if (user)     filter.user_profile = user;
+    
+    // Date range filter
+    if (dateFrom || dateTo) {
+      filter.date = {};
+      if (dateFrom) filter.date.$gte = new Date(dateFrom as string);
+      if (dateTo) filter.date.$lte = new Date(dateTo as string);
+    }
+    
+    // Amount range filter
+    if (amountMin || amountMax) {
+      filter.amount = {};
+      if (amountMin) filter.amount.$gte = Number(amountMin);
+      if (amountMax) filter.amount.$lte = Number(amountMax);
+    }
+    
     if (search) {
       const regex = new RegExp(search as string, 'i');
       filter.$or = [
@@ -56,6 +85,7 @@ export const exportTransactions = async (req: Request, res: Response): Promise<v
         { amount: isNaN(Number(search)) ? undefined : Number(search) }
       ].filter(Boolean);
     }
+    
     const sortObj: any = { [sortBy as string]: sortDir === 'asc' ? 1 : -1 };
     const transactions = await Transaction.find(filter).sort(sortObj);
     let fields = ['id', 'date', 'amount', 'category', 'status', 'user_id', 'user_profile'];
