@@ -8,6 +8,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
 import AnalyticsPage from './pages/AnalyticsPage';
 import WalletPage from './pages/WalletPage';
+import PersonalPage from './pages/PersonalPage';
+import MessagePage from './pages/MessagePage';
+import SettingsPage from './pages/SettingsPage';
 // import other pages as needed
 
 const navItems = [
@@ -104,6 +107,9 @@ const App: React.FC = () => {
                     <Route path="/summary" element={<SummaryPage />} />
                     <Route path="/analytics" element={<AnalyticsPage />} />
                     <Route path="/wallet" element={<WalletPage />} />
+                    <Route path="/personal" element={<PersonalPage />} />
+                    <Route path="/message" element={<MessagePage />} />
+                    <Route path="/setting" element={<SettingsPage />} />
                     {/* Add other routes here */}
                   </Routes>
                 </ProtectedRoute>
