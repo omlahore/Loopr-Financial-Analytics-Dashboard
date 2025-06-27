@@ -16,6 +16,11 @@ A full-stack financial analytics dashboard for managing, tracking, and visualizi
 </div>
 
 ---
+> [!IMPORTANT]
+> **Login Delay Notice**
+>
+> If the login or dashboard takes time to load, please wait a few moments and refresh the page.
+> This happens because Render’s free tier spins down inactive instances, causing a short delay when restarting.
 
 ## Project Overview
 
