@@ -1,113 +1,142 @@
-# 🚀 Loopr Financial Analytics Dashboard
+# Penta Financial Analytics Dashboard
 
-[![Deploy on Render](https://img.shields.io/badge/Deploy%20on-Render-3f51b5?logo=render&logoColor=white&style=for-the-badge)](https://render.com/)
-[![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white&style=for-the-badge)](https://www.mongodb.com/atlas)
-[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=black&style=for-the-badge)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)](https://nodejs.org/)
+A full-stack financial analytics dashboard for managing, tracking, and visualizing financial data.
 
 ---
 
-## 🌟 Project Overview
+## Live Project Links
 
-**Loopr** is a full-stack financial analytics dashboard for modern teams and individuals. It features:
-- **User authentication** (JWT-based)
-- **Transaction management** (CRUD, search, filter, export)
-- **Analytics dashboard** (revenue, expenses, net, trends)
-- **Responsive, modern UI** (React + MUI + Tailwind)
-- **RESTful API** (Node.js, Express, TypeScript)
-- **MongoDB Atlas** for cloud data storage
+<div align="center">
+  <a href="https://loopr.omlahore.com" target="_blank">
+    <img src="https://img.shields.io/badge/Live%20Frontend-Visit%20Penta-0a9396?style=for-the-badge" />
+  </a>
+  <a href="https://loopr-financial-analytics-dashboard.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/Live%20Backend-View%20API-264653?style=for-the-badge" />
+  </a>
+</div>
+
+---
+> [!IMPORTANT]
+> **Login Delay Notice**
+>
+> If the login or dashboard takes time to load, please wait a few moments and refresh the page.
+> This happens because Render’s free tier spins down inactive instances, causing a short delay when restarting.
+
+## Project Overview
+
+Penta is a modern full-stack financial analytics dashboard built with scalability and usability in mind. It provides:
+
+- User authentication using JWT
+- Transaction management (CRUD, search, filter, export)
+- Interactive analytics dashboard with charts and trends
+- Responsive UI using React, MUI, and Tailwind CSS
+- RESTful API built with Node.js, Express, and TypeScript
+- Cloud data storage via MongoDB Atlas
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 **Secure Auth:** Register, login, and manage users with JWT
-- 💸 **Transactions:** Add, view, filter, and export transactions
-- 📊 **Analytics:** Visualize revenue, expenses, and trends
-- 📁 **CSV Export:** Download filtered transactions as CSV
-- 🔎 **Search & Filter:** Powerful search, date, status, and category filters
-- 🧑‍💼 **User Roles:** Admin and user support (extensible)
-- ⚡ **Fast & Responsive:** Built with React, MUI, and Tailwind CSS
+- Secure user authentication (JWT-based)
+- Add, view, filter, and export financial transactions
+- Real-time analytics of income, expenses, and net balance
+- Export filtered data as CSV
+- User roles (admin and standard user)
+- Fully responsive UI optimized for all devices
 
 ---
 
-## 🛠️ Tech Stack
+## Screenshots
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/1be9b4d9-824d-4b4f-bbb5-79d9acd5c336" width="300" />
+  <img src="https://github.com/user-attachments/assets/548df88a-8d68-4088-b4fc-66c0da9db245" width="300" />
+  <img src="https://github.com/user-attachments/assets/3c0cc899-e877-4f2f-afe6-1c34fde0e4ed" width="300" />
+  <img src="https://github.com/user-attachments/assets/0cd41b17-8b45-4078-8014-fa7a093dc579" width="300" />
+  <img src="https://github.com/user-attachments/assets/d440e326-dcac-4d46-8da3-14aedb5627de" width="300" />
+  <img src="https://github.com/user-attachments/assets/fc3d2aa6-d859-4330-861a-8939b1ace56f" width="300" />
+  <img src="https://github.com/user-attachments/assets/6979fbec-9185-4674-bf83-be14c642cf2a" width="300" />
+  <img src="https://github.com/user-attachments/assets/c8782eb8-395d-4a69-8443-5636ec5b5810" width="300" />
+</div>
+
+---
+
+## Tech Stack
 
 | Frontend         | Backend                | Database      | Other         |
-|-----------------|------------------------|---------------|--------------|
-| React 19        | Node.js 18+            | MongoDB Atlas | TypeScript   |
-| MUI (Material)  | Express.js             |               | JWT Auth     |
-| Tailwind CSS    | TypeScript             |               | Chart.js     |
-| Axios           | CORS                   |               | Recharts     |
+|------------------|------------------------|---------------|---------------|
+| React 19         | Node.js 18+            | MongoDB Atlas | TypeScript    |
+| MUI (Material UI)| Express.js             |               | JWT Auth      |
+| Tailwind CSS     | TypeScript             |               | Chart.js      |
+| Axios            | CORS                   |               | Recharts      |
 
 ---
 
-## 🚦 Quick Start
+## Quick Start
 
 ### 1. Clone the Repository
-```bash
-git clone https://github.com/omlahore/Loopr-Financial-Analytics-Dashboard.git
+
+git clone https://github.com/omlahore/Loopr-Financial-Analytics-Dashboard.git  
 cd Loopr-Financial-Analytics-Dashboard
-```
 
 ### 2. Backend Setup
-```bash
-cd backend
+
+cd backend  
 npm install
-```
-Set your environment variables in Render or in a `.env` file:
-```env
-MONGODB_URI=mongodb+srv://loopr-admin:Loopr2024!@cluster0.0d6bxom.mongodb.net/loopr-db?retryWrites=true&w=majority
-JWT_SECRET=your-jwt-secret
+
+Create a .env file or set variables in your deployment environment:
+
+MONGODB_URI=mongodb+srv://loopr-admin:Loopr2024!@cluster0.0d6bxom.mongodb.net/loopr-db?retryWrites=true&w=majority  
+JWT_SECRET=your-jwt-secret  
 PORT=4000
-```
-Build and run:
-```bash
-npm run build
+
+Build and start:
+
+npm run build  
 npm start
-```
 
 ### 3. Frontend Setup
-```bash
-cd ../frontend
+
+cd ../frontend  
 npm install
-```
-Set your API base URL in `.env` (for local dev):
-```env
+
+Set your API base URL in .env:
+
 REACT_APP_API_BASE_URL=http://localhost:4000
-```
-Run the frontend:
-```bash
+
+Start the frontend:
+
 npm start
-```
 
 ---
 
-## 🧑‍💻 Usage
+## Usage
 
-- **Register** a new user or **login** with:
-  - Email: `admin@example.com`
-  - Password: `password123`
-- **Dashboard:** View analytics, summary, and recent transactions
-- **Transactions:** Search, filter, and export your data
-- **Wallet & Analytics:** Visualize your financial health
+- Register a new user or login using:
+  - Email: admin@example.com
+  - Password: password123
+- View dashboard analytics
+- Add, search, and export transactions
+- View financial trends and summaries
 
 ---
 
-## 📚 API Endpoints
+## API Endpoints
 
-### 🔑 Authentication
-- **POST `/auth/register`** — Register a new user
-- **POST `/auth/login`** — Login and receive JWT
-- **GET `/auth/me`** — Get current user info (requires JWT)
+### Authentication
 
-### 💸 Transactions
-- **GET `/transactions`** — List/filter transactions
-- **GET `/transactions/summary`** — Get analytics summary
-- **GET `/transactions/export`** — Export transactions as CSV
+POST /auth/register — Register a new user  
+POST /auth/login — Login and receive JWT  
+GET /auth/me — Retrieve current user info (JWT required)
 
-#### Example Transaction Object
-```json
+### Transactions
+
+GET /transactions — List and filter transactions  
+GET /transactions/summary — View financial summary  
+GET /transactions/export — Export transactions as CSV
+
+Example transaction object:
+
 {
   "id": "...",
   "date": "2024-05-20T12:00:00.000Z",
@@ -117,19 +146,9 @@ npm start
   "user_id": "...",
   "user_profile": "John Doe"
 }
-```
 
 ---
 
-## 🔗 Useful Links
-
-- [Live Demo (Frontend)](https://loopr.omlahore.com)
-- [Backend API (Render)](https://loopr-financial-analytics-dashboard.onrender.com)
-- [MongoDB Atlas](https://cloud.mongodb.com/)
-- [Project Repo](https://github.com/omlahore/Loopr-Financial-Analytics-Dashboard)
-
----
-
-## 📜 License
+## License
 
 MIT
